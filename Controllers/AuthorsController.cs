@@ -22,7 +22,7 @@ namespace Library_Management_System.Controllers
         public async Task<IActionResult> Index()
         {
               return _context.Authors != null ? 
-                          View(await _context.Authors.ToListAsync()) :
+                          View("AuthorsIndex", await _context.Authors.ToListAsync()) :
                           Problem("Entity set 'ApplicationContext.Authors'  is null.");
         }
 
