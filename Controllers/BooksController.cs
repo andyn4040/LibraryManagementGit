@@ -160,7 +160,7 @@ namespace Library_Management_System.Controllers
         }
 
         // GET: Books/Search
-        public async Task<IActionResult> Search(string searchTerm)
+        public async Task<IActionResult> Search(string searchTerm, string selectedProperty)
         {
             if (string.IsNullOrEmpty(searchTerm))
             {
@@ -170,11 +170,43 @@ namespace Library_Management_System.Controllers
 
             var lowerSearchTerm = searchTerm.ToLower();
 
-            // Perform a case-insensitive search based on title or ISBN
-            var searchResults = await _context.Books
-                .Where(b => b.Name.ToLower().Contains(lowerSearchTerm)
-                            || b.ISBNumber.ToString().Contains(searchTerm))
-                .ToListAsync();
+            IQueryable<Book> query = _context.Books;
+
+            if (!string.IsNullOrEmpty(selectedProperty))
+            {
+                if (selectedProperty == "ISBNumber" && int.TryParse(searchTerm, out var isbn))
+                {
+                    // Special handling for ISBN as an integer
+                    query = query.Where(b => EF.Property<int>(b, selectedProperty) == isbn);
+                }
+                else if (selectedProperty == "GenreId")
+                {
+                    IQueryable<Genre> queryGenre = _context.Genres;
+
+                    // Filter by GenreName
+                    queryGenre = queryGenre.Where(g => g.Name.ToLower().Contains(lowerSearchTerm));
+
+                    // Join the Book and Genre entities
+                    query = query.Join(
+                        queryGenre,
+                        b => b.GenreId,
+                        g => g.GenreId,
+                        (b, g) => b
+                    );
+                }
+                else
+                {
+                    // Use reflection to dynamically filter by the selected property
+                    query = query.Where(b => EF.Property<string>(b, selectedProperty).ToLower().Contains(lowerSearchTerm));
+                }
+            }
+            else
+            {
+                // Perform a case-insensitive search based on title or ISBN
+                query = query.Where(b => b.Name.ToLower().Contains(lowerSearchTerm) || b.ISBNumber.ToString().Contains(searchTerm));
+            }
+
+            var searchResults = await query.ToListAsync();
 
             return View("BooksIndex", searchResults);
         }

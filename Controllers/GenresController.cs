@@ -22,7 +22,7 @@ namespace Library_Management_System.Controllers
         public async Task<IActionResult> Index()
         {
               return _context.Genres != null ? 
-                          View(await _context.Genres.ToListAsync()) :
+                          View("GenresIndex", await _context.Genres.ToListAsync()) :
                           Problem("Entity set 'ApplicationContext.Genres'  is null.");
         }
 
