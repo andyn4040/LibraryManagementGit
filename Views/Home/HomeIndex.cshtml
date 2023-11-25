@@ -1,0 +1,24 @@
+﻿@model List<Book>
+
+<div class="text-center">
+    <h1>Welcome to the Library Management System</h1>
+    <p>Search for books by title or ISBN:</p>
+
+    <form asp-controller="Books" asp-action="Search" method="get">
+        <input type="text" name="searchTerm" placeholder="Enter title or ISBN" />
+        <button type="submit">Search</button>
+    </form>
+
+    @if (Model != null && Model.Any())
+    {
+        <h2>Search Results:</h2>
+        <ul>
+            @foreach (var book in Model)
+            {
+                <li>
+                    @Html.ActionLink(book.Name, "Details", "Books", new { id = book.BookId }, null)
+                </li>
+            }
+        </ul>
+    }
+</div>
