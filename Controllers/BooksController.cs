@@ -22,7 +22,7 @@ namespace Library_Management_System.Controllers
         public async Task<IActionResult> Index()
         {
               return _context.Books != null ? 
-                          View(await _context.Books.ToListAsync()) :
+                          View("BooksIndex", await _context.Books.ToListAsync()) :
                           Problem("Entity set 'ApplicationContext.Books'  is null.");
         }
 
@@ -157,6 +157,31 @@ namespace Library_Management_System.Controllers
         private bool BookExists(int id)
         {
           return (_context.Books?.Any(e => e.BookId == id)).GetValueOrDefault();
+        }
+
+        // GET: Books/Search
+        public async Task<IActionResult> Search(string searchTerm)
+        {
+            if (string.IsNullOrEmpty(searchTerm))
+            {
+                // Display all books if no search term provided
+                return View("BooksIndex", await _context.Books.ToListAsync());
+            }
+
+            var lowerSearchTerm = searchTerm.ToLower();
+
+            // Perform a case-insensitive search based on title or ISBN
+            var searchResults = await _context.Books
+                .Where(b => b.Name.ToLower().Contains(lowerSearchTerm)
+                            || b.ISBNumber.ToString().Contains(searchTerm))
+                .ToListAsync();
+
+            return View("BooksIndex", searchResults);
+        }
+
+        public IActionResult Home()
+        {
+            return RedirectToAction("", "");
         }
     }
 }
