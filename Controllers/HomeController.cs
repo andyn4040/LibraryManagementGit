@@ -18,6 +18,11 @@ namespace Library_Management_System.Controllers
             return View("HomeIndex");
         }
 
+        public IActionResult AdminIndex()
+        {
+            return View("AdminIndex");
+        }
+
         public IActionResult Privacy()
         {
             return View();

@@ -22,7 +22,7 @@ namespace Library_Management_System.Controllers
         public async Task<IActionResult> Index()
         {
               return _context.Transactions != null ? 
-                          View(await _context.Transactions.ToListAsync()) :
+                          View("TransactionsIndex", await _context.Transactions.ToListAsync()) :
                           Problem("Entity set 'ApplicationContext.Transactions'  is null.");
         }
 
@@ -157,6 +157,11 @@ namespace Library_Management_System.Controllers
         private bool TransactionExists(int id)
         {
           return (_context.Transactions?.Any(e => e.TransactionId == id)).GetValueOrDefault();
+        }
+
+        public IActionResult Back()
+        {
+            return RedirectToAction("AdminIndex", "Admin");
         }
     }
 }
