@@ -158,5 +158,10 @@ namespace Library_Management_System.Controllers
         {
           return (_context.Genres?.Any(e => e.GenreId == id)).GetValueOrDefault();
         }
+
+        public IActionResult Back()
+        {
+            return RedirectToAction("AdminIndex", "Admin");
+        }
     }
 }

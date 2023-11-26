@@ -215,5 +215,10 @@ namespace Library_Management_System.Controllers
         {
             return RedirectToAction("", "");
         }
+
+        public IActionResult Back()
+        {
+            return RedirectToAction("AdminIndex", "Admin");
+        }
     }
 }

@@ -158,5 +158,10 @@ namespace Library_Management_System.Controllers
         {
           return (_context.Authors?.Any(e => e.AuthorId == id)).GetValueOrDefault();
         }
+
+        public IActionResult Back()
+        {
+            return RedirectToAction("HomeIndex", "Home");
+        }
     }
 }
