@@ -220,5 +220,23 @@ namespace Library_Management_System.Controllers
         {
             return RedirectToAction("AdminIndex", "Admin");
         }
+
+        public async Task<IActionResult> Checkout(int? id)
+        {
+            if (id == null || _context.Books == null)
+            {
+                return NotFound();
+            }
+
+            var transaction = await _context.Transactions
+                .FirstOrDefaultAsync(m => m.BookId == id);
+            if (transaction == null)
+            {
+                return RedirectToAction("Create", "Transactions", new { id = id });
+                //return NotFound();
+            }
+
+            return RedirectToAction("", "Transactions");
+        }
     }
 }
