@@ -45,9 +45,19 @@ namespace Library_Management_System.Controllers
         }
 
         // GET: Transactions/Create
-        public IActionResult Create()
+        public IActionResult Create(int id)
         {
-            return View();
+            if (_context.Transactions == null)
+            {
+                return NotFound();
+            }
+
+            var transaction = new Transaction();
+            transaction.BookId = id;
+
+            _context.Transactions.Add(transaction);
+
+            return View(transaction);
         }
 
         // POST: Transactions/Create
