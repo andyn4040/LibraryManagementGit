@@ -18,15 +18,16 @@ namespace Library_Management_System.Controllers
             _context = context;
         }
 
-        // GET: Genres
+        #region GET ************************************************************************************************************************************************
+        // GET: Display list of Genres
         public async Task<IActionResult> Index()
         {
-              return _context.Genres != null ? 
-                          View("GenresIndex", await _context.Genres.ToListAsync()) :
-                          Problem("Entity set 'ApplicationContext.Genres'  is null.");
+            return _context.Genres != null ?
+                        View("GenresIndex", await _context.Genres.ToListAsync()) :
+                        Problem("Entity set 'ApplicationContext.Genres'  is null.");
         }
 
-        // GET: Genres/Details/5
+        // GET: Display details for a single Genre
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null || _context.Genres == null)
@@ -44,29 +45,13 @@ namespace Library_Management_System.Controllers
             return View(genre);
         }
 
-        // GET: Genres/Create
+        // GET: Display create page for a Genre
         public IActionResult Create()
         {
             return View();
         }
 
-        // POST: Genres/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("GenreId,Name")] Genre genre)
-        {
-            if (ModelState.IsValid)
-            {
-                _context.Add(genre);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
-            }
-            return View(genre);
-        }
-
-        // GET: Genres/Edit/5
+        // GET: Display edit page for a Genre
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null || _context.Genres == null)
@@ -82,9 +67,45 @@ namespace Library_Management_System.Controllers
             return View(genre);
         }
 
-        // POST: Genres/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        // GET: Display delete page for a Genre
+        public async Task<IActionResult> Delete(int? id)
+        {
+            if (id == null || _context.Genres == null)
+            {
+                return NotFound();
+            }
+
+            var genre = await _context.Genres
+                .FirstOrDefaultAsync(m => m.GenreId == id);
+            if (genre == null)
+            {
+                return NotFound();
+            }
+
+            return View(genre);
+        }
+        #endregion
+
+
+        #region POST ************************************************************************************************************************************************
+        // POST: Create Genre
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Create([Bind("GenreId,Name")] Genre genre)
+        {
+            if (ModelState.IsValid)
+            {
+                _context.Add(genre);
+                await _context.SaveChangesAsync();
+                return RedirectToAction(nameof(Index));
+            }
+            return View(genre);
+        }
+        #endregion
+
+
+        #region PUT ************************************************************************************************************************************************
+        // PUT: Edit Genre
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("GenreId,Name")] Genre genre)
@@ -116,26 +137,11 @@ namespace Library_Management_System.Controllers
             }
             return View(genre);
         }
+        #endregion
 
-        // GET: Genres/Delete/5
-        public async Task<IActionResult> Delete(int? id)
-        {
-            if (id == null || _context.Genres == null)
-            {
-                return NotFound();
-            }
 
-            var genre = await _context.Genres
-                .FirstOrDefaultAsync(m => m.GenreId == id);
-            if (genre == null)
-            {
-                return NotFound();
-            }
-
-            return View(genre);
-        }
-
-        // POST: Genres/Delete/5
+        #region DELETE ************************************************************************************************************************************************
+        // DELETE: Delete Genre
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
@@ -149,10 +155,12 @@ namespace Library_Management_System.Controllers
             {
                 _context.Genres.Remove(genre);
             }
-            
+
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
+        #endregion
+
 
         private bool GenreExists(int id)
         {

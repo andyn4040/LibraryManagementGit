@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Library_Management_System.Models;
+using Library_Management_System.ViewModels;
 
 namespace Library_Management_System.Controllers
 {
@@ -18,15 +19,16 @@ namespace Library_Management_System.Controllers
             _context = context;
         }
 
-        // GET: Transactions
+        #region GET ************************************************************************************************************************************************
+        // GET: Display list of Transactions
         public async Task<IActionResult> Index()
         {
-              return _context.Transactions != null ? 
-                          View("TransactionsIndex", await _context.Transactions.ToListAsync()) :
-                          Problem("Entity set 'ApplicationContext.Transactions'  is null.");
+            return _context.Transactions != null ?
+                        View("TransactionsIndex", await _context.Transactions.ToListAsync()) :
+                        Problem("Entity set 'ApplicationContext.Transactions'  is null.");
         }
 
-        // GET: Transactions/Details/5
+        // GET: Display details for a single transaction
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null || _context.Transactions == null)
@@ -44,39 +46,33 @@ namespace Library_Management_System.Controllers
             return View(transaction);
         }
 
-        // GET: Transactions/Create
+        // GET: Display create page for a Transaction
         public IActionResult Create(int id)
         {
-            if (_context.Transactions == null)
+            // Check if the book with the given id exists
+            var book = _context.Books.Find(id);
+            if (book == null)
             {
                 return NotFound();
             }
 
-            var transaction = new Transaction();
-            transaction.BookId = id;
-
-            _context.Transactions.Add(transaction);
-
-            return View(transaction);
-        }
-
-        // POST: Transactions/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("TransactionId,UserId,BookId,BorrowDate,ReturnDate")] Transaction transaction)
-        {
-            if (ModelState.IsValid)
+            var transactionViewModel = new TransactionCreateViewModel
             {
-                _context.Add(transaction);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
-            }
-            return View(transaction);
+                BookId = id,
+                BookName = book.Name, // Assuming there's a property named "Name" in your Book model
+                BorrowDate = DateTime.UtcNow
+            };
+
+            _context.Transactions.Add(new Transaction
+            {
+                BookId = id,
+                BorrowDate = DateTime.UtcNow
+            });
+
+            return View(transactionViewModel);
         }
 
-        // GET: Transactions/Edit/5
+        // GET: Display edit page for a Transaction
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null || _context.Transactions == null)
@@ -92,9 +88,49 @@ namespace Library_Management_System.Controllers
             return View(transaction);
         }
 
-        // POST: Transactions/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        // GET: Display delete page for a Transaction
+        public async Task<IActionResult> Delete(int? id)
+        {
+            if (id == null || _context.Transactions == null)
+            {
+                return NotFound();
+            }
+
+            var transaction = await _context.Transactions
+                .FirstOrDefaultAsync(m => m.TransactionId == id);
+            if (transaction == null)
+            {
+                return NotFound();
+            }
+
+            return View(transaction);
+        }
+        #endregion
+
+
+        #region POST ************************************************************************************************************************************************
+        // POST: Create Transaction
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Create([Bind("TransactionId,UserId,BookId,BorrowDate,ReturnDate")] Transaction transaction)
+        {
+            if (ModelState.IsValid)
+            {
+                _context.Update(transaction);
+                var book = await _context.Books
+                .FirstOrDefaultAsync(m => m.BookId == transaction.BookId);
+                book.Available = false;
+                _context.Update(book);
+                await _context.SaveChangesAsync();
+                return RedirectToAction(nameof(Index));
+            }
+            return View(transaction);
+        }
+        #endregion
+
+
+        #region PUT ************************************************************************************************************************************************
+        // PUT: Edit Transaction
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("TransactionId,UserId,BookId,BorrowDate,ReturnDate")] Transaction transaction)
@@ -126,26 +162,11 @@ namespace Library_Management_System.Controllers
             }
             return View(transaction);
         }
+        #endregion
 
-        // GET: Transactions/Delete/5
-        public async Task<IActionResult> Delete(int? id)
-        {
-            if (id == null || _context.Transactions == null)
-            {
-                return NotFound();
-            }
 
-            var transaction = await _context.Transactions
-                .FirstOrDefaultAsync(m => m.TransactionId == id);
-            if (transaction == null)
-            {
-                return NotFound();
-            }
-
-            return View(transaction);
-        }
-
-        // POST: Transactions/Delete/5
+        #region DELETE ************************************************************************************************************************************************
+        // DELETE: Delete Transaction
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
@@ -155,14 +176,20 @@ namespace Library_Management_System.Controllers
                 return Problem("Entity set 'ApplicationContext.Transactions'  is null.");
             }
             var transaction = await _context.Transactions.FindAsync(id);
-            if (transaction != null)
+            var book = await _context.Books.FirstOrDefaultAsync(m => m.BookId == transaction.BookId);
+            book.Available = true;
+
+            if (transaction != null && book != null)
             {
+                _context.Books.Update(book);
                 _context.Transactions.Remove(transaction);
             }
-            
+
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
+        #endregion
+
 
         private bool TransactionExists(int id)
         {

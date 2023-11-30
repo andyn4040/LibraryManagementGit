@@ -18,7 +18,8 @@ namespace Library_Management_System.Controllers
             _context = context;
         }
 
-        // GET: Authors
+        #region GET ************************************************************************************************************************************************
+        // GET: Display list of Authors
         public async Task<IActionResult> Index()
         {
               return _context.Authors != null ? 
@@ -26,7 +27,7 @@ namespace Library_Management_System.Controllers
                           Problem("Entity set 'ApplicationContext.Authors'  is null.");
         }
 
-        // GET: Authors/Details/5
+        // GET: Display detail for a single Author
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null || _context.Authors == null)
@@ -44,29 +45,13 @@ namespace Library_Management_System.Controllers
             return View(author);
         }
 
-        // GET: Authors/Create
+        // GET: Display create page
         public IActionResult Create()
         {
             return View();
         }
 
-        // POST: Authors/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("AuthorId,FirstName,LastName")] Author author)
-        {
-            if (ModelState.IsValid)
-            {
-                _context.Add(author);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
-            }
-            return View(author);
-        }
-
-        // GET: Authors/Edit/5
+        // GET: Display edit page
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null || _context.Authors == null)
@@ -82,9 +67,45 @@ namespace Library_Management_System.Controllers
             return View(author);
         }
 
-        // POST: Authors/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        // GET: Display delete page
+        public async Task<IActionResult> Delete(int? id)
+        {
+            if (id == null || _context.Authors == null)
+            {
+                return NotFound();
+            }
+
+            var author = await _context.Authors
+                .FirstOrDefaultAsync(m => m.AuthorId == id);
+            if (author == null)
+            {
+                return NotFound();
+            }
+
+            return View(author);
+        }
+        #endregion
+
+
+        #region POST ************************************************************************************************************************************************
+        // POST: Create Author
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Create([Bind("AuthorId,FirstName,LastName")] Author author)
+        {
+            if (ModelState.IsValid)
+            {
+                _context.Add(author);
+                await _context.SaveChangesAsync();
+                return RedirectToAction(nameof(Index));
+            }
+            return View(author);
+        }
+        #endregion
+
+
+        #region PUT ************************************************************************************************************************************************
+        // PUT: Edit Author
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("AuthorId,FirstName,LastName")] Author author)
@@ -116,26 +137,11 @@ namespace Library_Management_System.Controllers
             }
             return View(author);
         }
+        #endregion
 
-        // GET: Authors/Delete/5
-        public async Task<IActionResult> Delete(int? id)
-        {
-            if (id == null || _context.Authors == null)
-            {
-                return NotFound();
-            }
 
-            var author = await _context.Authors
-                .FirstOrDefaultAsync(m => m.AuthorId == id);
-            if (author == null)
-            {
-                return NotFound();
-            }
-
-            return View(author);
-        }
-
-        // POST: Authors/Delete/5
+        #region DELETE ************************************************************************************************************************************************
+        // POST: Delete Author
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
@@ -153,6 +159,8 @@ namespace Library_Management_System.Controllers
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
+        #endregion
+
 
         private bool AuthorExists(int id)
         {

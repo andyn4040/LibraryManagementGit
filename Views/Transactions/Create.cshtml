@@ -1,4 +1,4 @@
-﻿@model Library_Management_System.Models.Transaction
+﻿@model Library_Management_System.ViewModels.TransactionCreateViewModel
 
 @{
     ViewData["Title"] = "Create";
@@ -18,18 +18,22 @@
                 <span asp-validation-for="UserId" class="text-danger"></span>
             </div>
             <div class="form-group">
+                <label asp-for="BookName" class="control-label"></label>
+                <input asp-for="BookName" class="form-control" readonly />
+            </div>
+            <div class="form-group">
                 <label asp-for="BookId" class="control-label"></label>
                 <input asp-for="BookId" class="form-control" />
                 <span asp-validation-for="BookId" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="BorrowDate" class="control-label"></label>
-                <input asp-for="BorrowDate" class="form-control" />
+                <label asp-for="BorrowDate" class="control-label">Borrow Date</label>
+                <input asp-for="BorrowDate" class="form-control" type="date" />
                 <span asp-validation-for="BorrowDate" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="ReturnDate" class="control-label"></label>
-                <input asp-for="ReturnDate" class="form-control" />
+                <label asp-for="ReturnDate" class="control-label">Return Date</label>
+                <input asp-for="ReturnDate" class="form-control" type="date" />
                 <span asp-validation-for="ReturnDate" class="text-danger"></span>
             </div>
             <div class="form-group">

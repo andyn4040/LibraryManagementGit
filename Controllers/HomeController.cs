@@ -13,15 +13,20 @@ namespace Library_Management_System.Controllers
             _logger = logger;
         }
 
+        #region GET ************************************************************************************************************************************************
+        //GET: Display home page
         public IActionResult Index()
         {
             return View("HomeIndex");
         }
 
+        //GET: Display admin page
         public IActionResult AdminIndex()
         {
             return View("AdminIndex");
         }
+        #endregion
+
 
         public IActionResult Privacy()
         {
