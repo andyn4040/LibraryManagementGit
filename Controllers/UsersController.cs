@@ -27,24 +27,6 @@ namespace Library_Management_System.Controllers
                         Problem("Entity set 'ApplicationContext.Users'  is null.");
         }
 
-        // GET: Display details for a single User
-        public async Task<IActionResult> Details(int? id)
-        {
-            if (id == null || _context.Users == null)
-            {
-                return NotFound();
-            }
-
-            var user = await _context.Users
-                .FirstOrDefaultAsync(m => m.UserId == id);
-            if (user == null)
-            {
-                return NotFound();
-            }
-
-            return View(user);
-        }
-
         // GET: Display create page for a User
         public IActionResult Create()
         {

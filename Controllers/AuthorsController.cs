@@ -27,24 +27,6 @@ namespace Library_Management_System.Controllers
                           Problem("Entity set 'ApplicationContext.Authors'  is null.");
         }
 
-        // GET: Display detail for a single Author
-        public async Task<IActionResult> Details(int? id)
-        {
-            if (id == null || _context.Authors == null)
-            {
-                return NotFound();
-            }
-
-            var author = await _context.Authors
-                .FirstOrDefaultAsync(m => m.AuthorId == id);
-            if (author == null)
-            {
-                return NotFound();
-            }
-
-            return View(author);
-        }
-
         // GET: Display create page
         public IActionResult Create()
         {
