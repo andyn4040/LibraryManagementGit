@@ -27,24 +27,6 @@ namespace Library_Management_System.Controllers
                         Problem("Entity set 'ApplicationContext.Genres'  is null.");
         }
 
-        // GET: Display details for a single Genre
-        public async Task<IActionResult> Details(int? id)
-        {
-            if (id == null || _context.Genres == null)
-            {
-                return NotFound();
-            }
-
-            var genre = await _context.Genres
-                .FirstOrDefaultAsync(m => m.GenreId == id);
-            if (genre == null)
-            {
-                return NotFound();
-            }
-
-            return View(genre);
-        }
-
         // GET: Display create page for a Genre
         public IActionResult Create()
         {
