@@ -9,6 +9,7 @@ namespace Library_Management_System.Models
 			FirstName = "";
 			LastName = "";
 			Email = "";
+            Type = UserType.Borrower;
 		}
 
         /// <summary>
@@ -35,11 +36,16 @@ namespace Library_Management_System.Models
         /// Email of user
         /// </summary>
         public string Email { get; set; }
+
+        /// <summary>
+        /// Password of user
+        /// </summary>
+        public string Password { get; set; }
     }
 
     public enum UserType 
 	{ 
-		Admin,
-		Borrower
+		Admin = 1,
+		Borrower = 2
 	}
 }

@@ -1,0 +1,11 @@
+﻿@model List<User>
+
+<div class="text-center">
+    <h1>Welcome to the Library Management System</h1>
+    <form asp-controller="Login" asp-action="Login" method="post">
+        <input type="text" name="email" placeholder="Email" />
+        <input type="text" name="password" placeholder="Password" />
+        <button type="submit">Login</button>
+    </form>
+    <a asp-action="CreateAccount">Create Account</a>
+</div>
