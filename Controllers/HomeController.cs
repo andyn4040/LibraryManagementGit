@@ -6,17 +6,31 @@ namespace Library_Management_System.Controllers
 {
     public class HomeController : Controller
     {
-        private readonly ILogger<HomeController> _logger;
+        private readonly ApplicationContext _context;
+        private readonly ISessionService _sessionService;
+        private int currentUserId;
+        private User currentUser;
+        private bool isAdmin;
 
-        public HomeController(ILogger<HomeController> logger)
+        public HomeController(ApplicationContext context, ISessionService sessionService)
         {
-            _logger = logger;
+            _context = context;
+            _sessionService = sessionService;
         }
 
         #region GET ************************************************************************************************************************************************
         //GET: Display home page
         public IActionResult Index()
         {
+            currentUserId = _sessionService.GetSessionValue<int>("UserId");
+            currentUser = _context.Users.FirstOrDefault(x => x.UserId == currentUserId);
+
+            if (currentUser != null) 
+            {
+                isAdmin = (currentUser.Type == UserType.Admin);
+            }
+
+            ViewData["IsAdmin"] = isAdmin;
             return View("HomeIndex");
         }
 

@@ -13,10 +13,12 @@ namespace Library_Management_System.Controllers
     public class TransactionsController : Controller
     {
         private readonly ApplicationContext _context;
+        private readonly ISessionService _sessionService;
 
-        public TransactionsController(ApplicationContext context)
+        public TransactionsController(ApplicationContext context, ISessionService sessionService)
         {
             _context = context;
+            _sessionService = sessionService;
         }
 
         #region GET ************************************************************************************************************************************************

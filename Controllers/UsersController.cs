@@ -12,10 +12,12 @@ namespace Library_Management_System.Controllers
     public class UsersController : Controller
     {
         private readonly ApplicationContext _context;
+        private readonly ISessionService _sessionService;
 
-        public UsersController(ApplicationContext context)
+        public UsersController(ApplicationContext context, ISessionService sessionService)
         {
             _context = context;
+            _sessionService = sessionService;
         }
 
         #region GET ************************************************************************************************************************************************
