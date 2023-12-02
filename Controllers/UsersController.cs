@@ -73,7 +73,7 @@ namespace Library_Management_System.Controllers
         // POST: Create User
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("UserId,Type,FirstName,LastName,Email")] User user)
+        public async Task<IActionResult> Create([Bind("UserId,Type,FirstName,LastName,Email,Password")] User user)
         {
             if (ModelState.IsValid)
             {
@@ -90,7 +90,7 @@ namespace Library_Management_System.Controllers
         // PUT: Edit User
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("UserId,Type,FirstName,LastName,Email")] User user)
+        public async Task<IActionResult> Edit(int id, [Bind("UserId,Type,FirstName,LastName,Email,Password")] User user)
         {
             if (id != user.UserId)
             {
