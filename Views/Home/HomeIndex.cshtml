@@ -28,6 +28,9 @@
             }
         </ul>
     }
-
-    @Html.ActionLink("Admin Page", "AdminIndex", "Admin", new { area = "" }, new { @class = "btn btn-primary" })
+    
+    @if (ViewData["IsAdmin"] as bool? == true)
+    {
+        @Html.ActionLink("Admin Page", "AdminIndex", "Admin", new { area = "" }, new { @class = "btn btn-primary" })
+    }
 </div>
