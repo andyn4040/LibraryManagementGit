@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Newtonsoft.Json;
 
-namespace Library_Management_System.Models
+namespace Library_Management_System.Services
 {
     public interface ISessionService
     {
@@ -30,7 +30,7 @@ namespace Library_Management_System.Models
 
             return sessionValue != null
                 ? JsonConvert.DeserializeObject<T>(sessionValue)
-                : default(T);
+                : default;
         }
 
         public void RemoveSessionValue(string key)

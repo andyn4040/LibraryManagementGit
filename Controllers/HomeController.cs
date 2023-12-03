@@ -1,9 +1,12 @@
 ﻿using Library_Management_System.Models;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
+using Microsoft.AspNetCore.Authorization;
+using Library_Management_System.Services;
 
 namespace Library_Management_System.Controllers
 {
+    [Authorize]
     public class HomeController : Controller
     {
         private readonly ApplicationContext _context;
