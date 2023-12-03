@@ -6,9 +6,12 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Library_Management_System.Models;
+using Microsoft.AspNetCore.Authorization;
+using Library_Management_System.Services;
 
 namespace Library_Management_System.Controllers
 {
+    [Authorize]
     public class AuthorsController : Controller
     {
         private readonly ApplicationContext _context;
