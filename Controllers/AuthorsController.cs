@@ -156,7 +156,7 @@ namespace Library_Management_System.Controllers
 
         public IActionResult Back()
         {
-            return RedirectToAction("HomeIndex", "Home");
+            return RedirectToAction("AdminIndex", "Admin");
         }
     }
 }
