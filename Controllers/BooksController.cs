@@ -110,20 +110,13 @@ namespace Library_Management_System.Controllers
                     // Special handling for ISBN as an integer
                     query = query.Where(b => EF.Property<int>(b, selectedProperty) == isbn);
                 }
-                else if (selectedProperty == "GenreId")
+                else if (selectedProperty == "Genre")
                 {
-                    IQueryable<Genre> queryGenre = _context.Genres;
+                    IQueryable<BookGenre> queryGenre = _context.BookGenres;
 
-                    // Filter by GenreName
-                    queryGenre = queryGenre.Where(g => g.Name.ToLower().Contains(lowerSearchTerm));
-
-                    // Join the Book and Genre entities
-                    query = query.Join(
-                        queryGenre,
-                        b => b.GenreId,
-                        g => g.GenreId,
-                        (b, g) => b
-                    );
+                    query = from book in _context.Books
+                            where book.BookGenres.Any(bg => bg.Genre.Name == lowerSearchTerm)
+                            select book;
                 }
                 else
                 {

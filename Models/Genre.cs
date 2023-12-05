@@ -18,5 +18,7 @@ namespace Library_Management_System.Models
         /// Name of the genre
         /// </summary>
         public string Name { get; set; }
+
+        public virtual ICollection<BookGenre> BookGenres { get; set; }
     }
 }

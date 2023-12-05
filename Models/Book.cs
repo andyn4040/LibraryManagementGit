@@ -5,12 +5,10 @@ namespace Library_Management_System.Models
         public Book()
         {
             Name = "";
-            AuthorId = 0;
             ISBNumber = 0;
             Summary = "";
             Available = true;
             Pages = 0;
-            GenreId = 0;
         }
 
         /// <summary>
@@ -22,11 +20,6 @@ namespace Library_Management_System.Models
         /// Name of book
         /// </summary>
         public string Name { get; set; }
-
-        /// <summary>
-        /// Author id foreign key
-        /// </summary>
-        public int AuthorId { get; set; }
 
         /// <summary>
         /// International standard book number
@@ -47,10 +40,9 @@ namespace Library_Management_System.Models
         /// Count of pages in book
         /// </summary>
         public int Pages { get; set; }
+        
+        public virtual ICollection<BookAuthor> BookAuthors { get; set; }
 
-        /// <summary>
-        /// Genre id foreign key
-        /// </summary>
-        public int GenreId { get; set; }
+        public virtual ICollection<BookGenre> BookGenres { get; set; }
     }
 }
