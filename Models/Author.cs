@@ -24,5 +24,7 @@ namespace Library_Management_System.Models
         /// Last name of author
         /// </summary>
         public string LastName { get; set; }
+
+        public virtual ICollection<BookAuthor> BookAuthors { get; set; }
     }
 }
